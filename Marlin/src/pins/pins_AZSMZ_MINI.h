@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2017 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,18 +19,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * AZSMZ MINI pin assignments
  */
 
 #ifndef TARGET_LPC1768
-  #error "Oops!  Make sure you have the LPC1768 environment selected in your IDE."
+  #error "Oops! Make sure you have the LPC1768 environment selected in your IDE."
 #endif
 
-#ifndef BOARD_NAME
-  #define BOARD_NAME "AZSMZ MINI"
-#endif
+#define BOARD_NAME "AZSMZ MINI"
 
 //
 // Servos
@@ -72,9 +71,9 @@
 // Temperature Sensors
 //  3.3V max when defined as an analog input
 //
-#define TEMP_0_PIN          0  // A0 (TH1)
-#define TEMP_BED_PIN        1  // A1 (TH2)
-#define TEMP_1_PIN          2  // A2 (TH3)
+#define TEMP_0_PIN          0   // A0 (TH1)
+#define TEMP_BED_PIN        1   // A1 (TH2)
+#define TEMP_1_PIN          2   // A2 (TH3)
 
 //
 // Heaters / Fans
@@ -82,8 +81,13 @@
 // EFB
 #define HEATER_0_PIN       P2_04
 #define HEATER_BED_PIN     P2_05
-#define FAN_PIN            P2_07
+#ifndef FAN_PIN
+  #define FAN_PIN          P2_07
+#endif
 #define FAN1_PIN           P0_26
+
+#define LCD_SDSS           P0_16   // LCD SD chip select
+#define ONBOARD_SD_CS_PIN  P0_06   // Chip select for "System" SD card
 
 #if ENABLED(AZSMZ_12864)
   #define BEEPER_PIN       P1_30
@@ -92,8 +96,24 @@
   #define BTN_EN1          P4_28
   #define BTN_EN2          P1_27
   #define BTN_ENC          P3_26
-  #define LCD_SDSS         P0_16
+  #ifndef SDCARD_CONNECTION
+    #define SDCARD_CONNECTION LCD
+  #endif
+#endif
+
+#if SD_CONNECTION_IS(LCD)
+  #define SCK_PIN          P0_15
+  #define MISO_PIN         P0_17
+  #define MOSI_PIN         P0_18
+  #define SS_PIN           LCD_SDSS
   #define SD_DETECT_PIN    P3_25
+#elif SD_CONNECTION_IS(ONBOARD)
+  #define SCK_PIN          P0_07
+  #define MISO_PIN         P0_08
+  #define MOSI_PIN         P0_09
+  #define SS_PIN           ONBOARD_SD_CS_PIN
+#elif SD_CONNECTION_IS(CUSTOM_CABLE)
+  #error "No custom SD drive cable defined for this board."
 #endif
 
 //

@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2017 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  *  Rev B  2 JUN 2017
@@ -33,7 +34,7 @@
  *  Teensyduino -  https://www.pjrc.com/teensy/teensyduino.html
  *  Installation - https://www.pjrc.com/teensy/td_download.html
  *
- *    Select Teensy++ 2.0 in Arduino IDE from the 'Tools -> Boards' menu
+ *    Select Teensy++ 2.0 in Arduino IDE from the 'Tools > Board' menu
  *
  *    Note: With Teensyduino extension, the Arduino IDE will report 130048 bytes of program storage space available,
  *    but there is actually only 122880 bytes due to the larger DFU bootloader shipped by default on all Printrboard RevF.
@@ -48,7 +49,7 @@
  *          hardware directory in Arduino.  The Arduino hardware directory will probably
  *          be located in a path similar to this: C:\Program Files (x86)\Arduino\hardware.
  *       3. Restart Arduino.
- *       4. Select "Printrboard" from the 'Tools -> Boards' menu.
+ *       4. Select "Printrboard" from the 'Tools > Board' menu.
  *
  *  Teensyduino is the most popular and easiest option.
  */
@@ -63,14 +64,15 @@
  */
 
 #ifndef __AVR_AT90USB1286__
-  #error "Oops!  Make sure you have 'Teensy++ 2.0' or 'Printrboard' selected from the 'Tools -> Boards' menu."
+  #error "Oops! Select 'Teensy++ 2.0' or 'Printrboard' in 'Tools > Board.'"
 #endif
 
 #ifndef USBCON
   #error "USBCON should be defined by the platform for this board."
 #endif
 
-#define BOARD_NAME         "Printrboard Rev.F"
+#define BOARD_NAME "Printrboard Rev.F"
+
 // Disable JTAG pins so EXP1 pins work correctly
 // (Its pins are used for the Extrudrboard and filament sensor, for example).
 #define DISABLE_JTAG
@@ -190,14 +192,16 @@
 #endif
 #endif
 
-#define FAN_PIN            16   // C6 PWM3A
+#ifndef FAN_PIN
+  #define FAN_PIN          16   // C6 PWM3A
+#endif
 
 //
 // LCD / Controller
 //
 //#define USE_INTERNAL_SD
 
-#if ENABLED(ULTRA_LCD)
+#if HAS_SPI_LCD
   #define LCD_PINS_RS       9   // E1       JP11-11
   #define LCD_PINS_ENABLE   8   // E0       JP11-10
   #define LCD_PINS_D4       7   // D7       JP11-8
@@ -205,7 +209,7 @@
   #define LCD_PINS_D6       5   // D5       JP11-6
   #define LCD_PINS_D7       4   // D4       JP11-5
 
-  #if ENABLED(VIKI2) || ENABLED(miniVIKI)
+  #if ANY(VIKI2, miniVIKI)
 
     #define BEEPER_PIN      8   // E0       JP11-10
     #define DOGLCD_A0      40   // F2       JP2-2
@@ -218,39 +222,39 @@
 
     #define SDSS            3   // F5 TMS   JP2-8
 
-    #define STAT_LED_RED_PIN  12  // C2       JP11-14
-    #define STAT_LED_BLUE_PIN 10  // C0       JP11-12
+    #define STAT_LED_RED_PIN  12   // C2       JP11-14
+    #define STAT_LED_BLUE_PIN 10   // C0       JP11-12
 
   #elif ENABLED(MINIPANEL)
 
     #if DISABLED(USE_INTERNAL_SD)
       //      PIN       FASTIO PIN#  ATUSB90 PIN# Teensy2.0++ PIN#  Printrboard RevF Conn.   MKSLCD12864 PIN#
-      #define SDSS               11  //        36               C1                EXP2-13             EXP2-07
-      #define SD_DETECT_PIN       9  //        34               E1                EXP2-11             EXP2-04
+      #define SDSS          11   //      36               C1                EXP2-13             EXP2-07
+      #define SD_DETECT_PIN  9   //      34               E1                EXP2-11             EXP2-04
     #endif
 
     //      PIN       FASTIO PIN#  ATUSB90 PIN# Teensy2.0++ PIN#  Printrboard RevF Conn.   MKSLCD12864 PIN#
-    #define DOGLCD_A0       4  //        29               D4                EXP2-05             EXP1-04
-    #define DOGLCD_CS       5  //        30               D5                EXP2-06             EXP1-05
-    #define BTN_ENC         6  //        31               D6                EXP2-07             EXP1-09
-    #define BEEPER_PIN      7  //        32               D7                EXP2-08             EXP1-10
-    #define KILL_PIN        8  //        33               E0                EXP2-10             EXP2-03
-    #define BTN_EN1        10  //        35               C0                EXP2-12             EXP2-06
-    #define BTN_EN2        12  //        37               C2                EXP2-14             EXP2-08
-    //#define LCD_BACKLIGHT_PIN 43  //        56               F5                EXP1-12     Not Implemented
-    //#define SCK          21  //        11               B1                ICSP-04             EXP2-09
-    //#define MOSI         22  //        12               B2                ICSP-03             EXP2-05
-    //#define MISO         23  //        13               B3                ICSP-06             EXP2-05
+    #define DOGLCD_A0       4   //       29               D4                EXP2-05             EXP1-04
+    #define DOGLCD_CS       5   //       30               D5                EXP2-06             EXP1-05
+    #define BTN_ENC         6   //       31               D6                EXP2-07             EXP1-09
+    #define BEEPER_PIN      7   //       32               D7                EXP2-08             EXP1-10
+    #define KILL_PIN        8   //       33               E0                EXP2-10             EXP2-03
+    #define BTN_EN1        10   //       35               C0                EXP2-12             EXP2-06
+    #define BTN_EN2        12   //       37               C2                EXP2-14             EXP2-08
+    //#define LCD_BACKLIGHT_PIN 43   //    56               F5                EXP1-12     Not Implemented
+    //#define SCK          21   //         11               B1                ICSP-04             EXP2-09
+    //#define MOSI         22   //         12               B2                ICSP-03             EXP2-05
+    //#define MISO         23   //         13               B3                ICSP-06             EXP2-05
 
     // increase delays
     #ifndef ST7920_DELAY_1
-      #define ST7920_DELAY_1 DELAY_5_NOP
+      #define ST7920_DELAY_1 DELAY_NS(313)
     #endif
     #ifndef ST7920_DELAY_2
-      #define ST7920_DELAY_2 DELAY_5_NOP
+      #define ST7920_DELAY_2 DELAY_NS(313)
     #endif
     #ifndef ST7920_DELAY_3
-      #define ST7920_DELAY_3 DELAY_5_NOP
+      #define ST7920_DELAY_3 DELAY_NS(313)
     #endif
 
   #else
@@ -268,7 +272,7 @@
 //
 //      PIN       FASTIO PIN#  ATUSB90 PIN# Teensy2.0++ PIN#  Printrboard RevF Conn.
 #ifndef SDSS
-  #define SDSS             20  //        10               B0
+  #define SDSS             20   //       10               B0
 #endif
 
 /**

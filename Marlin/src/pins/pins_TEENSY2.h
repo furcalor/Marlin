@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2017 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  *  Rev B  2 JUN 2017
@@ -31,7 +32,7 @@
  *  and with the mainstream Marlin software.
  *
  *  Teensyduino - http://www.pjrc.com/teensy/teensyduino.html
- *    Select Teensy++ 2.0 in Arduino IDE from the 'Tools -> Boards' menu
+ *    Select Teensy++ 2.0 in Arduino IDE from the 'Tools > Board' menu
  *
  *    Installation instructions are at the above URL.  Don't bother loading the
  *    libraries - they are not used with the Marlin software.
@@ -46,7 +47,7 @@
  *          hardware directory in Arduino.  The Arduino hardware directory will probably
  *          be located in a path similar to this: C:\Program Files (x86)\Arduino\hardware.
  *       3. Restart Arduino.
- *       4. Select "Printrboard" from the 'Tools -> Boards' menu.
+ *       4. Select "Printrboard" from the 'Tools > Board' menu.
  *
  *  Teensyduino is the most popular option. Printrboard is used if your board doesn't have
  *  the Teensyduino bootloader on it.
@@ -107,10 +108,10 @@
  */
 
 #ifndef __AVR_AT90USB1286__
-  #error "Oops!  Make sure you have 'Teensy++ 2.0' or 'Printrboard' selected from the 'Tools -> Boards' menu."
+  #error "Oops! Select 'Teensy++ 2.0' or 'Printrboard' in 'Tools > Board.'"
 #endif
 
-#define BOARD_NAME         "Teensy++2.0"
+#define BOARD_NAME "Teensy++2.0"
 
 //
 // Limit Switches
@@ -149,7 +150,9 @@
 //
 #define HEATER_0_PIN       15   // C5 PWM3B  Extruder
 #define HEATER_BED_PIN     14   // C4 PWM3C
-#define FAN_PIN            16   // C6 PWM3A  Fan
+#ifndef FAN_PIN
+  #define FAN_PIN          16   // C6 PWM3A  Fan
+#endif
 
 //
 // Misc. Functions
@@ -177,6 +180,6 @@
 //
 // M3/M4/M5 - Spindle/Laser Control
 //
-#define SPINDLE_LASER_ENABLE_PIN  5  // D5  Pin should have a pullup!
-#define SPINDLE_LASER_PWM_PIN     0  // D0 PWM0B   MUST BE HARDWARE PWM
-#define SPINDLE_DIR_PIN           7  // D7
+#define SPINDLE_LASER_ENA_PIN     5   // D5  Pin should have a pullup!
+#define SPINDLE_LASER_PWM_PIN     0   // D0 PWM0B   MUST BE HARDWARE PWM
+#define SPINDLE_DIR_PIN           7   // D7

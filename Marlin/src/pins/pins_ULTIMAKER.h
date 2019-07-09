@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * Ultimaker pin assignments
@@ -33,7 +34,7 @@
  */
 
 #if !defined(__AVR_ATmega1280__) && !defined(__AVR_ATmega2560__)
-  #error "Oops!  Make sure you have 'Arduino Mega' selected from the 'Tools -> Boards' menu."
+  #error "Oops! Select 'Arduino/Genuino Mega or Mega 2560' in 'Tools > Board.'"
 #endif
 
 #define DEFAULT_MACHINE_NAME    "Ultimaker"
@@ -43,7 +44,7 @@
 //
 // Servos
 //
-#define SERVO0_PIN         13 // untested
+#define SERVO0_PIN         11
 
 //
 // Limit Switches
@@ -99,7 +100,9 @@
 #define HEATER_1_PIN        3
 #define HEATER_BED_PIN      4
 
-#define FAN_PIN             7
+#ifndef FAN_PIN
+  #define FAN_PIN           7
+#endif
 
 //
 // Misc. Functions
@@ -113,7 +116,7 @@
 //
 // LCD / Controller
 //
-#if ENABLED(ULTRA_LCD)
+#if HAS_SPI_LCD
 
   #define BEEPER_PIN 18
 
@@ -152,11 +155,11 @@
 
   #endif // !NEWPANEL
 
-#endif // ULTRA_LCD
+#endif // HAS_SPI_LCD
 
 //
 // M3/M4/M5 - Spindle/Laser Control
 //
-#define SPINDLE_LASER_PWM_PIN     9  // MUST BE HARDWARE PWM
-#define SPINDLE_LASER_ENABLE_PIN 10  // Pin should have a pullup!
-#define SPINDLE_DIR_PIN          11  // use the EXP3 PWM header
+#define SPINDLE_LASER_PWM_PIN     9   // MUST BE HARDWARE PWM
+#define SPINDLE_LASER_ENA_PIN    10   // Pin should have a pullup!
+#define SPINDLE_DIR_PIN          11   // use the EXP3 PWM header

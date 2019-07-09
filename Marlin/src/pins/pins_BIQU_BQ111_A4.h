@@ -1,10 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
- * Copyright (C) 2017 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * BIQU BQ111-A4
@@ -31,22 +31,20 @@
  */
 
 #ifndef TARGET_LPC1768
-  #error "Oops!  Make sure you have the LPC1768 environment selected in your IDE."
+  #error "Oops! Make sure you have the LPC1768 environment selected in your IDE."
 #endif
 
-#ifndef BOARD_NAME
-  #define BOARD_NAME "BIQU BQ111-A4"
-#endif
+#define BOARD_NAME "BIQU BQ111-A4"
 
 //
 // Limit Switches
 //
-#define X_MIN_PIN         P1_24  //10k pullup to 3.3V, 1K series
-#define X_MAX_PIN         P1_25  //10k pullup to 3.3V, 1K series
-#define Y_MIN_PIN         P1_26  //10k pullup to 3.3V, 1K series
-#define Y_MAX_PIN         P1_27  //10k pullup to 3.3V, 1K series
-#define Z_MIN_PIN         P1_28  //10k pullup to 3.3V, 1K series
-#define Z_MAX_PIN         P1_29  //10k pullup to 3.3V, 1K series
+#define X_MIN_PIN         P1_24   // 10k pullup to 3.3V, 1K series
+#define X_MAX_PIN         P1_25   // 10k pullup to 3.3V, 1K series
+#define Y_MIN_PIN         P1_26   // 10k pullup to 3.3V, 1K series
+#define Y_MAX_PIN         P1_27   // 10k pullup to 3.3V, 1K series
+#define Z_MIN_PIN         P1_28   // 10k pullup to 3.3V, 1K series
+#define Z_MAX_PIN         P1_29   // 10k pullup to 3.3V, 1K series
 
 
 //
@@ -73,8 +71,8 @@
 // Temperature Sensors
 //  3.3V max when defined as an analog input
 //
-#define TEMP_0_PIN          0  // A0 (T0)
-#define TEMP_BED_PIN        1  // A1 (T1)
+#define TEMP_0_PIN          0   // A0 (T0)
+#define TEMP_BED_PIN        1   // A1 (T1)
 
 
 //
@@ -82,13 +80,15 @@
 //
 #define HEATER_0_PIN       P2_7
 #define HEATER_BED_PIN     P2_5
-#define FAN_PIN            P2_4
+#ifndef FAN_PIN
+  #define FAN_PIN          P2_4
+#endif
 
 //
 // Unused
 //
-//#define PIN_P2_10         P2_10  // IBOOT-1
-//#define PIN_P0_27         P0_27  // Onboard SD Detect
+//#define PIN_P2_10         P2_10   // IBOOT-1
+//#define PIN_P0_27         P0_27   // Onboard SD Detect
 
 /**
  * LCD / Controller
@@ -100,20 +100,20 @@
  * for the onboard SD card, and a chip select signal is not provided for the remote
  * SD card.
  */
-#if ENABLED(ULTRA_LCD)
+#if HAS_SPI_LCD
 
-  #define BEEPER_PIN          P1_31  // EXP1-1
+  #define BEEPER_PIN          P1_31   // EXP1-1
 
-  #define BTN_EN1             P3_26  // EXP2-3
-  #define BTN_EN2             P3_25  // EXP2-5
-  #define BTN_ENC             P1_30  // EXP1-2
+  #define BTN_EN1             P3_26   // EXP2-3
+  #define BTN_EN2             P3_25   // EXP2-5
+  #define BTN_ENC             P1_30   // EXP1-2
 
-  #define SD_DETECT_PIN       P0_27  // EXP2-7
-  #define LCD_PINS_RS         P0_16  // EXP1-4
-  #define LCD_PINS_ENABLE     P0_18  // (MOSI) EXP1-3
-  #define LCD_PINS_D4         P0_15  // (SCK)  EXP1-5
+  #define SD_DETECT_PIN       P0_27   // EXP2-7
+  #define LCD_PINS_RS         P0_16   // EXP1-4
+  #define LCD_PINS_ENABLE     P0_18   // (MOSI) EXP1-3
+  #define LCD_PINS_D4         P0_15   // (SCK)  EXP1-5
 
-  #if ENABLED(REPRAP_DISCOUNT_SMART_CONTROLLER) && !ENABLED(DOGLCD)
+  #if ENABLED(REPRAP_DISCOUNT_SMART_CONTROLLER) && HAS_CHARACTER_LCD
     #error "REPRAP_DISCOUNT_SMART_CONTROLLER is not supported by the BIQU BQ111-A4"
   #endif
 
@@ -121,7 +121,7 @@
     #error "SDSUPPORT is not supported by the BIQU BQ111-A4 when an LCD controller is used"
   #endif
 
-#endif // ULTRA_LCD
+#endif // HAS_SPI_LCD
 
 
 /**
@@ -132,10 +132,10 @@
  */
 #if ENABLED(SDSUPPORT)
 
-  #define SCK_PIN   P0_15 // EXP1-5
-  #define MISO_PIN  P0_16 // EXP1-4
-  #define MOSI_PIN  P0_18 // EXP1-3
-  #define SS_PIN    P1_30 // EXP1-2
+  #define SCK_PIN   P0_15   // EXP1-5
+  #define MISO_PIN  P0_16   // EXP1-4
+  #define MOSI_PIN  P0_18   // EXP1-3
+  #define SS_PIN    P1_30   // EXP1-2
   #define SDSS      SS_PIN
 
 #endif // SDSUPPORT

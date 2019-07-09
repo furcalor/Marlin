@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,18 +19,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * planner_bezier.h
  *
- * Compute and buffer movement commands for bezier curves
+ * Compute and buffer movement commands for Bézier curves
  *
  */
 
-#ifndef PLANNER_BEZIER_H
-#define PLANNER_BEZIER_H
-
-#include "../inc/MarlinConfig.h"
+#include <stdint.h>
+#include "../core/macros.h"
 
 void cubic_b_spline(
               const float position[NUM_AXIS], // current position
@@ -39,5 +38,3 @@ void cubic_b_spline(
               float fr_mm_s,
               uint8_t extruder
             );
-
-#endif // PLANNER_BEZIER_H

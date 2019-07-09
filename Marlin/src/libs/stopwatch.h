@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,15 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef STOPWATCH_H
-#define STOPWATCH_H
+#pragma once
 
 // Print debug messages with M111 S2 (Uses 156 bytes of PROGMEM)
 //#define DEBUG_STOPWATCH
 
-#include "../core/macros.h"
-#include "../core/types.h"
+#include "../core/macros.h" // for FORCE_INLINE
+#include "../core/millis_t.h"
 
 /**
  * @brief Stopwatch class
@@ -36,11 +34,7 @@
  */
 class Stopwatch {
   private:
-    enum State : char {
-      STOPPED,
-      RUNNING,
-      PAUSED
-    };
+    enum State : char { STOPPED, RUNNING, PAUSED };
 
     static Stopwatch::State state;
     static millis_t accumulator;
@@ -54,28 +48,34 @@ class Stopwatch {
     FORCE_INLINE static void init() { reset(); }
 
     /**
-     * @brief Stops the stopwatch
-     * @details Stops the running timer, it will silently ignore the request if
-     * no timer is currently running.
-     * @return true is method was successful
+     * @brief Stop the stopwatch
+     * @details Stop the running timer, it will silently ignore the request if
+     *          no timer is currently running.
+     * @return true on success
      */
     static bool stop();
 
     /**
      * @brief Pause the stopwatch
      * @details Pause the running timer, it will silently ignore the request if
-     * no timer is currently running.
-     * @return true is method was successful
+     *          no timer is currently running.
+     * @return true on success
      */
     static bool pause();
 
     /**
      * @brief Start the stopwatch
      * @details Start the timer, it will silently ignore the request if the
-     * timer is already running.
-     * @return true is method was successful
+     *          timer is already running.
+     * @return true on success
      */
     static bool start();
+
+    /**
+     * @brief Resume the stopwatch
+     * @details Resume a timer from a given duration
+     */
+    static void resume(const millis_t with_time);
 
     /**
      * @brief Reset the stopwatch
@@ -88,14 +88,14 @@ class Stopwatch {
      * @details Return true if the timer is currently running, false otherwise.
      * @return true if stopwatch is running
      */
-    static bool isRunning();
+    FORCE_INLINE static bool isRunning() { return state == RUNNING; }
 
     /**
      * @brief Check if the timer is paused
      * @details Return true if the timer is currently paused, false otherwise.
      * @return true if stopwatch is paused
      */
-    static bool isPaused();
+    FORCE_INLINE static bool isPaused() { return state == PAUSED; }
 
     /**
      * @brief Get the running time
@@ -114,5 +114,3 @@ class Stopwatch {
 
     #endif
 };
-
-#endif // STOPWATCH_H

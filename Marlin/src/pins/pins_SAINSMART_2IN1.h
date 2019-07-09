@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
- *  Sainsmart 2-in-1 pin assignments
+ * Sainsmart 2-in-1 pin assignments
  */
 
 #if HOTENDS > 2 || E_STEPPERS > 2
@@ -33,9 +34,9 @@
 //
 // Heaters / Fans
 //
-#define RAMPS_D10_PIN 9 // E
-#define RAMPS_D9_PIN  7 // F PART FAN in front of board next to Extruder heat
-     // RAMPS_D8_PIN  8 // B
-#define MOSFET_D_PIN 10 // F / E
+#define RAMPS_D10_PIN 9   // E
+#define RAMPS_D9_PIN  7   // F PART FAN in front of board next to Extruder heat
+     // RAMPS_D8_PIN  8   // B
+#define MOSFET_D_PIN 10   // F / E
 
 #include "pins_RAMPS.h"

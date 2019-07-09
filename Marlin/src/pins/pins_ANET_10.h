@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2017 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * Anet V1.0 board pin assignments
@@ -89,12 +90,10 @@
  */
 
 #ifndef __AVR_ATmega1284P__
-  #error "Oops!  Make sure you have 'Anet V1.0', 'Anet V1.0 (Optiboot)' or 'Sanguino' selected from the 'Tools -> Boards' menu."
+  #error "Oops! Select 'Sanguino' in 'Tools > Board' and 'ATmega1284P' in 'Tools > Processor.' (For PlatformIO, use 'melzi' or 'melzi_optiboot.')"
 #endif
 
-#ifndef BOARD_NAME
-  #define BOARD_NAME "Anet"
-#endif
+#define BOARD_NAME "Anet 1.0"
 
 //
 // Limit Switches
@@ -125,15 +124,18 @@
 //
 // Temperature Sensors
 //
-#define TEMP_0_PIN          7  // Analog Input (pin 33 extruder)
-#define TEMP_BED_PIN        6  // Analog Input (pin 34 bed)
+#define TEMP_0_PIN          7   // Analog Input (pin 33 extruder)
+#define TEMP_BED_PIN        6   // Analog Input (pin 34 bed)
 
 //
 // Heaters / Fans
 //
-#define HEATER_0_PIN       13  // (extruder)
-#define HEATER_BED_PIN     12  // (bed)
-#define FAN_PIN             4
+#define HEATER_0_PIN       13   // (extruder)
+#define HEATER_BED_PIN     12   // (bed)
+
+#ifndef FAN_PIN
+  #define FAN_PIN           4
+#endif
 
 //
 // Misc. Functions
@@ -150,25 +152,22 @@
  *  REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  */
 
-#if ENABLED(ULTRA_LCD) && ENABLED(NEWPANEL)
+#if HAS_SPI_LCD
   #define LCD_SDSS           28
   #if ENABLED(ADC_KEYPAD)
-    #define SERVO0_PIN       27 // free for BLTouch/3D-Touch
+    #define SERVO0_PIN       27   // free for BLTouch/3D-Touch
     #define LCD_PINS_RS      28
     #define LCD_PINS_ENABLE  29
     #define LCD_PINS_D4      10
     #define LCD_PINS_D5      11
     #define LCD_PINS_D6      16
     #define LCD_PINS_D7      17
-    #define BTN_EN1          -1
-    #define BTN_EN2          -1
-    #define BTN_ENC          -1
     #define ADC_KEYPAD_PIN    1
-  #elif ENABLED(REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER) || ENABLED(ANET_FULL_GRAPHICS_LCD)
+  #elif EITHER(REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER, ANET_FULL_GRAPHICS_LCD)
     // Pin definitions for the Anet A6 Full Graphics display and the RepRapDiscount Full Graphics
     // display using an adapter board  // https://go.aisler.net/benlye/anet-lcd-adapter/pcb
     // See below for alternative pin definitions for use with https://www.thingiverse.com/thing:2103748
-    #define SERVO0_PIN       29 // free for BLTouch/3D-Touch
+    #define SERVO0_PIN       29   // free for BLTouch/3D-Touch
     #define BEEPER_PIN       17
     #define LCD_PINS_RS      27
     #define LCD_PINS_ENABLE  28
@@ -177,20 +176,20 @@
     #define BTN_EN2          10
     #define BTN_ENC          16
     #ifndef ST7920_DELAY_1
-      #define ST7920_DELAY_1 DELAY_0_NOP
+      #define ST7920_DELAY_1 DELAY_NS(0)
     #endif
     #ifndef ST7920_DELAY_2
-      #define ST7920_DELAY_2 DELAY_1_NOP
+      #define ST7920_DELAY_2 DELAY_NS(63)
     #endif
     #ifndef ST7920_DELAY_3
-      #define ST7920_DELAY_3 DELAY_2_NOP
+      #define ST7920_DELAY_3 DELAY_NS(125)
     #endif
     #define STD_ENCODER_PULSES_PER_STEP 4
     #define STD_ENCODER_STEPS_PER_MENU_ITEM 1
   #endif
 #else
   #define SERVO0_PIN         27
-#endif  // ULTRA_LCD && NEWPANEL
+#endif
 
 /**
  * ====================================================================
@@ -201,7 +200,7 @@
  * published by oderwat on Thingiverse at https://www.thingiverse.com/thing:2103748.
  *
  * Using that adapter requires changing the pin definition as follows:
- *   #define SERVO0_PIN        27 // free for BLTouch/3D-Touch
+ *   #define SERVO0_PIN        27   // free for BLTouch/3D-Touch
  *   #define BEEPER_PIN        28
  *   #define LCD_PINS_RS       30
  *   #define LCD_PINS_ENABLE   29

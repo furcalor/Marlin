@@ -75,14 +75,14 @@ void usb_task_idle(void) {
   bool usb_task_msc_isenabled(void)             { return main_b_msc_enable; }
 #endif
 
-bool usb_task_cdc_enable(const uint8_t port)  { return ((main_b_cdc_enable = true)); }
-void usb_task_cdc_disable(const uint8_t port) { main_b_cdc_enable = false; main_b_dtr_active = false; }
+bool usb_task_cdc_enable(const uint8_t port)  { UNUSED(port); return ((main_b_cdc_enable = true)); }
+void usb_task_cdc_disable(const uint8_t port) { UNUSED(port); main_b_cdc_enable = false; main_b_dtr_active = false; }
 bool usb_task_cdc_isenabled(void)             { return main_b_cdc_enable; }
 
 /*! \brief Called by CDC interface
  * Callback running when CDC device have received data
  */
-void usb_task_cdc_rx_notify(const uint8_t port) { }
+void usb_task_cdc_rx_notify(const uint8_t port) { UNUSED(port); }
 
 /*! \brief Configures communication line
  *
@@ -90,13 +90,13 @@ void usb_task_cdc_rx_notify(const uint8_t port) { }
  */
 static uint16_t dwDTERate = 0;
 void usb_task_cdc_config(const uint8_t port, usb_cdc_line_coding_t *cfg) {
-    // Store last DTE rate
-    dwDTERate = cfg->dwDTERate;
+  UNUSED(port);
+  // Store last DTE rate
+  dwDTERate = cfg->dwDTERate;
 }
 
-
 void usb_task_cdc_set_dtr(const uint8_t port, const bool b_enable) {
-
+  UNUSED(port);
   // Keep DTR status
   main_b_dtr_active = b_enable;
 
@@ -225,7 +225,7 @@ bool usb_task_extra_string(void) {
   uint8_t str_lgt = 0;
 
   // Link payload pointer to the string corresponding at request
-  switch (udd_g_ctrlreq.req.wValue & 0xff) {
+  switch (udd_g_ctrlreq.req.wValue & 0xFF) {
   case UDI_CDC_IAD_STRING_ID:
     str_lgt = sizeof(udi_cdc_name) - 1;
     str = udi_cdc_name;
@@ -301,7 +301,11 @@ void usb_task_init(void) {
 
   uint16_t *ptr;
 
+  // Disable USB peripheral so we start clean and avoid lockups
+  otg_disable();
   udd_disable();
+
+  // Set the USB interrupt to our stack
   UDD_SetStack(&USBD_ISR);
 
   // Start USB stack to authorize VBus monitoring

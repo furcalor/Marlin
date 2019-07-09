@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2017 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * Brainwave 1.0 pin assignments (AT90USB646)
@@ -53,9 +54,9 @@
  *
  *    1. In the Arduino IDE, under Files -> Preferences paste the following URL
  *       https://rawgit.com/Bob-the-Kuhn/Marlin_AT90USB/master/package_MARLIN_AT90USB_index.json
- *    2. Under Tools -> Board -> Boards manager, scroll to the bottom, click on MARLIN_AT90USB
+ *    2. Under Tools > Board -> Boards manager, scroll to the bottom, click on MARLIN_AT90USB
  *       and then click on "Install"
- *    3. Select "AT90USB646_TEENSYPP" from the 'Tools -> Boards' menu.
+ *    3. Select "AT90USB646_TEENSYPP" from the 'Tools > Board' menu.
  */
 
 /**
@@ -68,10 +69,10 @@
  */
 
 #ifndef __AVR_AT90USB646__
-  #error "Oops!  Make sure you have 'AT90USB646_TEENSYPP' selected from the 'Tools -> Boards' menu."
+  #error "Oops! Select 'AT90USB646_TEENSYPP' in 'Tools > Board.'"
 #endif
 
-#define BOARD_NAME         "Brainwave"
+#define BOARD_NAME "Brainwave"
 
 //
 // Limit Switches
@@ -115,7 +116,9 @@
 #define HEATER_0_PIN       32   // A4 Extruder
 #define HEATER_BED_PIN     18   // E6 Bed
 
-#define FAN_PIN            31   // A3 Fan
+#ifndef FAN_PIN
+  #define FAN_PIN          31   // A3 Fan
+#endif
 
 //
 // Misc. Functions

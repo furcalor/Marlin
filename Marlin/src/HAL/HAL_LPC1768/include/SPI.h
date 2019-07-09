@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 #pragma once
 
-#include "../../HAL_SPI.h"
+#include "../../shared/HAL_SPI.h"
 
 #include <stdint.h>
 
@@ -31,13 +30,16 @@
 
 class SPISettings {
   public:
-    SPISettings(int a, int b, int c) {};
+    SPISettings(uint32_t speed, int, int) : spi_speed(speed) {};
+    uint32_t spiRate() { return spi_speed; }
+  private:
+    uint32_t spi_speed;
 };
 
 class SPIClass {
   public:
     void begin();
-    void beginTransaction(SPISettings foo) {};
+    void beginTransaction(SPISettings);
     void endTransaction() {};
     uint8_t transfer(uint8_t data);
     uint16_t transfer16(uint16_t data);

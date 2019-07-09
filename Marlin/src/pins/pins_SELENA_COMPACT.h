@@ -1,10 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
- * Copyright (C) 2017 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,19 +19,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * Selena Compact pin assignments
  */
 
 #ifndef TARGET_LPC1768
-  #error "Oops!  Make sure you have the LPC1768 environment selected in your IDE."
+  #error "Oops! Make sure you have the LPC1768 environment selected in your IDE."
 #endif
 
-#ifndef BOARD_NAME
-  #define BOARD_NAME "Selena Compact"
-  #define DEFAULT_WEBSITE_URL "https://github.com/Ales2-k/Selena"
-#endif
+#define BOARD_NAME        "Selena Compact"
+#define BOARD_WEBSITE_URL "https://github.com/Ales2-k/Selena"
 
 //
 // Limit Switches
@@ -73,9 +71,9 @@
 // Temperature Sensors
 // 3.3V max when defined as an analog input
 //
-#define TEMP_BED_PIN        0  // A0 (TH1)
-#define TEMP_0_PIN          1  // A1 (TH2)
-#define TEMP_1_PIN          2  // A2 (TH3)
+#define TEMP_BED_PIN        0   // A0 (TH1)
+#define TEMP_0_PIN          1   // A1 (TH2)
+#define TEMP_1_PIN          2   // A2 (TH3)
 
 
 //
@@ -86,7 +84,9 @@
 #define HEATER_BED2_PIN    P2_04
 #define HEATER_0_PIN       P2_07
 #define HEATER_1_PIN       P2_06
-#define FAN_PIN            P1_24
+#ifndef FAN_PIN
+  #define FAN_PIN          P1_24
+#endif
 #define FAN1_PIN           P1_26
 
 //

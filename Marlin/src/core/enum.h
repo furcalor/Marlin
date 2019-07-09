@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,17 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef __ENUM_H__
-#define __ENUM_H__
+#pragma once
 
 /**
  * Axis indices as enumerated constants
  *
- * Special axis:
- *  - A_AXIS and B_AXIS are used by COREXY printers
- *  - X_HEAD and Y_HEAD is used for systems that don't have a 1:1 relationship
- *    between X_AXIS and X Head movement, like CoreXY bots
+ *  - X_AXIS, Y_AXIS, and Z_AXIS should be used for axes in Cartesian space
+ *  - A_AXIS, B_AXIS, and C_AXIS should be used for Steppers, corresponding to XYZ on Cartesians
+ *  - X_HEAD, Y_HEAD, and Z_HEAD should be used for Steppers on Core kinematics
  */
 enum AxisEnum : unsigned char {
   X_AXIS    = 0,
@@ -42,12 +39,22 @@ enum AxisEnum : unsigned char {
   X_HEAD    = 4,
   Y_HEAD    = 5,
   Z_HEAD    = 6,
+  E0_AXIS   = 3,
+  E1_AXIS   = 4,
+  E2_AXIS   = 5,
+  E3_AXIS   = 6,
+  E4_AXIS   = 7,
+  E5_AXIS   = 8,
   ALL_AXES  = 0xFE,
   NO_AXIS   = 0xFF
 };
 
-#define LOOP_S_LE_N(VAR, S, N) for (uint8_t VAR=S; VAR<=N; VAR++)
-#define LOOP_S_L_N(VAR, S, N) for (uint8_t VAR=S; VAR<N; VAR++)
+#if HAS_DRIVER(L6470)
+  enum L6470_driver_enum : unsigned char { X, Y, Z, X2, Y2, Z2, Z3, E0, E1, E2, E3, E4, E5 };
+#endif
+
+#define LOOP_S_LE_N(VAR, S, N) for (uint8_t VAR=(S); VAR<=(N); VAR++)
+#define LOOP_S_L_N(VAR, S, N) for (uint8_t VAR=(S); VAR<(N); VAR++)
 #define LOOP_LE_N(VAR, N) LOOP_S_LE_N(VAR, 0, N)
 #define LOOP_L_N(VAR, N) LOOP_S_L_N(VAR, 0, N)
 
@@ -69,21 +76,3 @@ typedef enum {
   TEMPUNIT_K,
   TEMPUNIT_F
 } TempUnit;
-
-/**
- * SD Card
- */
-enum LsAction : char { LS_SerialPrint, LS_Count, LS_GetFilename };
-
-/**
- * Ultra LCD
- */
-enum LCDViewAction : char {
-  LCDVIEW_NONE,
-  LCDVIEW_REDRAW_NOW,
-  LCDVIEW_CALL_REDRAW_NEXT,
-  LCDVIEW_CLEAR_CALL_REDRAW,
-  LCDVIEW_CALL_NO_REDRAW
-};
-
-#endif // __ENUM_H__

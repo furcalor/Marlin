@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 /**
  * Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (c) 2009 by William Greiman
  *
  * This file is part of the Arduino Sd2Card Library
  */
@@ -81,7 +81,7 @@ bool SdBaseFile::addDirCluster() {
 // cache a file's directory entry
 // return pointer to cached entry or null for failure
 dir_t* SdBaseFile::cacheDirEntry(uint8_t action) {
-  if (!vol_->cacheRawBlock(dirBlock_, action)) return NULL;
+  if (!vol_->cacheRawBlock(dirBlock_, action)) return nullptr;
   return vol_->cache()->dir + dirIndex_;
 }
 
@@ -841,7 +841,7 @@ bool SdBaseFile::openParent(SdBaseFile* dir) {
 
   // search for parent in '../..'
   do {
-    if (file.readDir(&entry, NULL) != 32) return false;
+    if (file.readDir(&entry, nullptr) != 32) return false;
     c = entry.firstClusterLow;
     c |= (uint32_t)entry.firstClusterHigh << 16;
   } while (c != cluster);
@@ -905,7 +905,7 @@ int SdBaseFile::peek() {
 // print uint8_t with width 2
 static void print2u(const uint8_t v) {
   if (v < 10) SERIAL_CHAR('0');
-  SERIAL_ECHO_F(v, DEC);
+  SERIAL_ECHO(int(v));
 }
 
 /**
@@ -1055,7 +1055,7 @@ int8_t SdBaseFile::readDir(dir_t* dir, char* longFilename) {
   if (!isDir() || (0x1F & curPosition_)) return -1;
 
   // If we have a longFilename buffer, mark it as invalid.
-  // If long filename is found it will be filled automatically.
+  // If a long filename is found it will be filled automatically.
   if (longFilename) longFilename[0] = '\0';
 
   while (1) {
@@ -1724,9 +1724,5 @@ int16_t SdBaseFile::write(const void* buf, uint16_t nbyte) {
   writeError = true;
   return -1;
 }
-
-#if ALLOW_DEPRECATED_FUNCTIONS
-  void (*SdBaseFile::oldDateTime_)(uint16_t &date, uint16_t &time) = 0;
-#endif
 
 #endif // SDSUPPORT

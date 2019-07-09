@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,10 @@
 
 #include "MarlinSerialUSB_Due.h"
 
+#if ENABLED(EMERGENCY_PARSER)
+  #include "../../feature/emergency_parser.h"
+#endif
+
 // Imports from Atmel USB Stack/CDC implementation
 extern "C" {
   bool usb_task_cdc_isenabled(void);
@@ -46,8 +50,13 @@ extern "C" {
 // Pending character
 static int pending_char = -1;
 
+#if ENABLED(EMERGENCY_PARSER)
+  static EmergencyParser::State emergency_state; // = EP_RESET
+#endif
+
 // Public Methods
 void MarlinSerialUSB::begin(const long baud_setting) {
+  UNUSED(baud_setting);
 }
 
 void MarlinSerialUSB::end() {
@@ -66,6 +75,11 @@ int MarlinSerialUSB::peek(void) {
     return -1;
 
   pending_char = udi_cdc_getc();
+
+  #if ENABLED(EMERGENCY_PARSER)
+    emergency_parser.update(emergency_state, (char)pending_char);
+  #endif
+
   return pending_char;
 }
 
@@ -84,7 +98,13 @@ int MarlinSerialUSB::read(void) {
   if (!udi_cdc_is_rx_ready())
     return -1;
 
-  return udi_cdc_getc();
+  int c = udi_cdc_getc();
+
+  #if ENABLED(EMERGENCY_PARSER)
+    emergency_parser.update(emergency_state, (char)c);
+  #endif
+
+  return c;
 }
 
 bool MarlinSerialUSB::available(void) {
@@ -95,8 +115,8 @@ bool MarlinSerialUSB::available(void) {
       (usb_task_cdc_isenabled() && udi_cdc_is_rx_ready());
 }
 
-void MarlinSerialUSB::flush(void) {
-}
+void MarlinSerialUSB::flush(void) { }
+void MarlinSerialUSB::flushTX(void) { }
 
 void MarlinSerialUSB::write(const uint8_t c) {
 
@@ -124,8 +144,8 @@ void MarlinSerialUSB::write(const uint8_t c) {
 }
 
 /**
-* Imports from print.h
-*/
+ * Imports from print.h
+ */
 
 void MarlinSerialUSB::print(char c, int base) {
   print((long)c, base);
@@ -266,7 +286,7 @@ void MarlinSerialUSB::printFloat(double number, uint8_t digits) {
 }
 
 // Preinstantiate
-MarlinSerialUSB customizedSerial;
+MarlinSerialUSB customizedSerial1;
 
 #endif // SERIAL_PORT == -1
 

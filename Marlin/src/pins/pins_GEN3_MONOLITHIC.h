@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * Gen3 Monolithic Electronics pin assignments
@@ -50,7 +51,7 @@
  */
 
 #ifndef __AVR_ATmega644P__
-  #error "Oops!  Make sure you have 'Sanguino' selected from the 'Tools -> Boards' menu."
+  #error "Oops! Select 'Sanguino' in 'Tools > Board.'"
 #endif
 
 #define BOARD_NAME "Gen3 Monolithic"
@@ -68,11 +69,11 @@
 //
 #define X_STEP_PIN         15
 #define X_DIR_PIN          18
-#define X_ENABLE_PIN       24 // actually uses Y_enable_pin
+#define X_ENABLE_PIN       24   // actually uses Y_enable_pin
 
 #define Y_STEP_PIN         23
 #define Y_DIR_PIN          22
-#define Y_ENABLE_PIN       24 // shared with X_enable_pin
+#define Y_ENABLE_PIN       24   // shared with X_enable_pin
 
 #define Z_STEP_PIN         27
 #define Z_DIR_PIN          28
@@ -95,7 +96,6 @@
 //
 // Misc. Functions
 //
-#define PS_ON_PIN          14 // Alex, does this work on the card?
+#define PS_ON_PIN          14   // Alex, does this work on the card?
 
 // Alex extras from Gen3+
-

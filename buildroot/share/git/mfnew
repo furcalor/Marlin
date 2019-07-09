@@ -6,7 +6,7 @@
 #
 
 usage() {
-  echo "Usage: `basename $0` [1|2] [name]" 1>&2
+  echo "usage: `basename $0` [1|2] [name]" 1>&2
 }
 
 [[ $# < 3 && $1 != "-h" && $1 != "--help" ]] || { usage; exit 1; }
@@ -31,4 +31,4 @@ case "$#" in
 esac
 
 git fetch upstream
-git checkout upstream/$TARG -b $BRANCH
+git checkout --no-track upstream/$TARG -b $BRANCH

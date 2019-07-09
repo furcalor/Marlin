@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 #ifndef __STM32F1__
-  #error "Oops!  Make sure you have an STM32F1 board selected from the 'Tools -> Boards' menu."
+  #error "Oops! Select an STM32F1 board in 'Tools > Board.'"
 #endif
 
 /**
@@ -35,33 +36,29 @@
 #define BOGUS_TEMPERATURE_FAILSAFE_OVERRIDE
 
 //
+// Limit Switches
+//
+#define U_MIN_PIN          -1
+#define V_MIN_PIN          -1
+#define W_MIN_PIN          -1
+#define X_STOP_PIN         PB3
+#define Y_STOP_PIN         PB4
+#define Z_STOP_PIN         PB5
+
+//
 // Steppers
 //
 #define X_STEP_PIN         PC0
 #define X_DIR_PIN          PC1
 #define X_ENABLE_PIN       PA8
-#define X_MIN_PIN          PB3
-#define X_MAX_PIN          -1
 
 #define Y_STEP_PIN         PC2
 #define Y_DIR_PIN          PC3
 #define Y_ENABLE_PIN       PA8
-#define Y_MIN_PIN          -1
-#define Y_MAX_PIN          PB4
 
 #define Z_STEP_PIN         PC4
 #define Z_DIR_PIN          PC5
 #define Z_ENABLE_PIN       PA8
-#define Z_MIN_PIN          -1
-#define Z_MAX_PIN          PB5
-
-#define Y2_STEP_PIN        -1
-#define Y2_DIR_PIN         -1
-#define Y2_ENABLE_PIN      -1
-
-#define Z2_STEP_PIN        -1
-#define Z2_DIR_PIN         -1
-#define Z2_ENABLE_PIN      -1
 
 #define E0_STEP_PIN        PC6
 #define E0_DIR_PIN         PC7
@@ -82,44 +79,34 @@
 //
 // Misc. Functions
 //
-#define SDPOWER            -1
 #define SDSS               PA4
 #define LED_PIN            PD2
-
-#define PS_ON_PIN          -1
-#define KILL_PIN           -1
 
 //
 // Heaters / Fans
 //
 #define HEATER_0_PIN       PB0   // EXTRUDER 1
 #define HEATER_1_PIN       PB1
-#define HEATER_2_PIN       -1
 
 #define HEATER_BED_PIN     PA3   // BED
-#define HEATER_BED2_PIN    -1    // BED2
-#define HEATER_BED3_PIN    -1    // BED3
-
-#define FAN_PIN            -1 // (Sprinter config)
 
 //
 // Temperature Sensors
 //
-#define TEMP_BED_PIN       PA0   // ANALOG NUMBERING
-#define TEMP_0_PIN         PA1   // ANALOG NUMBERING
-#define TEMP_1_PIN         PA2   // ANALOG NUMBERING
-#define TEMP_2_PIN         -1   // ANALOG NUMBERING
+#define TEMP_BED_PIN       PA0   // Analog Input
+#define TEMP_0_PIN         PA1   // Analog Input
+#define TEMP_1_PIN         PA2   // Analog Input
 
 //
 // LCD Pins
 //
-#if ENABLED(ULTRA_LCD)
+#if HAS_SPI_LCD
 
   #if ENABLED(REPRAPWORLD_GRAPHICAL_LCD)
-    #define LCD_PINS_RS         49 // CS chip select /SS chip slave select
-    #define LCD_PINS_ENABLE     51 // SID (MOSI)
-    #define LCD_PINS_D4         52 // SCK (CLK) clock
-  #elif ENABLED(NEWPANEL) && ENABLED(PANEL_ONE)
+    #define LCD_PINS_RS         49   // CS chip select /SS chip slave select
+    #define LCD_PINS_ENABLE     51   // SID (MOSI)
+    #define LCD_PINS_D4         52   // SCK (CLK) clock
+  #elif BOTH(NEWPANEL, PANEL_ONE)
     #define LCD_PINS_RS         PB8
     #define LCD_PINS_ENABLE     PD2
     #define LCD_PINS_D4         PB12
@@ -179,14 +166,14 @@
 
     #elif ENABLED(LCD_I2C_VIKI)
 
-      #define BTN_EN1           22 // http://files.panucatt.com/datasheets/viki_wiring_diagram.pdf explains 40/42.
-      #define BTN_EN2            7 // 22/7 are unused on RAMPS_14. 22 is unused and 7 the SERVO0_PIN on RAMPS_13.
+      #define BTN_EN1           22   // http://files.panucatt.com/datasheets/viki_wiring_diagram.pdf explains 40/42.
+      #define BTN_EN2            7   // 22/7 are unused on RAMPS_14. 22 is unused and 7 the SERVO0_PIN on RAMPS_13.
 
       #define BTN_ENC           -1
       #define LCD_SDSS          53
       #define SD_DETECT_PIN     49
 
-    #elif ENABLED(VIKI2) || ENABLED(miniVIKI)
+    #elif ANY(VIKI2, miniVIKI)
 
       #define BEEPER_PIN        33
 
@@ -200,7 +187,7 @@
       #define BTN_ENC           39
 
       #define SDSS              53
-      #define SD_DETECT_PIN     -1 // Pin 49 for display sd interface, 72 for easy adapter board
+      #define SD_DETECT_PIN     -1   // Pin 49 for display sd interface, 72 for easy adapter board
 
       #define KILL_PIN          31
 
@@ -225,12 +212,11 @@
       // Pins for DOGM SPI LCD Support
       #define DOGLCD_A0         44
       #define DOGLCD_CS         66
-      #define LCD_BACKLIGHT_PIN 65 // backlight LED on A11/D65
+      #define LCD_BACKLIGHT_PIN 65   // backlight LED on A11/D65
       #define SDSS              53
 
       #define KILL_PIN          64
       // GLCD features
-      //#define LCD_CONTRAST   190
       // Uncomment screen orientation
       //#define LCD_SCREEN_ROT_90
       //#define LCD_SCREEN_ROT_180
@@ -256,9 +242,9 @@
         #define SHIFT_CLK       44
         #define SHIFT_LD        42
       #elif ENABLED(PANEL_ONE)
-        #define BTN_EN1         59 // AUX2 PIN 3
-        #define BTN_EN2         63 // AUX2 PIN 4
-        #define BTN_ENC         49 // AUX3 PIN 7
+        #define BTN_EN1         59   // AUX2 PIN 3
+        #define BTN_EN2         63   // AUX2 PIN 4
+        #define BTN_ENC         49   // AUX3 PIN 7
       #else
         #define BTN_EN1         37
         #define BTN_EN2         35
@@ -269,15 +255,10 @@
         #define SD_DETECT_PIN   49
         #define KILL_PIN        41
       #else
-        //#define SD_DETECT_PIN -1 // Ramps doesn't use this
+        //#define SD_DETECT_PIN -1   // Ramps doesn't use this
       #endif
 
     #endif
   #endif // NEWPANEL
 
-#endif // ULTRA_LCD
-
-#define U_MIN_PIN          -1
-#define V_MIN_PIN          -1
-#define W_MIN_PIN          -1
-
+#endif // HAS_SPI_LCD

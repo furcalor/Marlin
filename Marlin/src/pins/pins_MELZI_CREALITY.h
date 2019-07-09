@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
 /**
  * Melzi (Creality) pin assignments
@@ -45,23 +46,26 @@
 #undef LCD_PINS_D5
 #undef LCD_PINS_D6
 #undef LCD_PINS_D7
-#undef FIL_RUNOUT_PIN
+#undef FIL_RUNOUT_PIN           // Uses Beeper/LED Pin Pulled to GND
 
-#define LCD_SDSS           31 // Smart Controller SD card reader (rather than the Melzi)
-#define LCD_PINS_RS        28 // st9720 CS
-#define LCD_PINS_ENABLE    17 // st9720 DAT
-#define LCD_PINS_D4        30 // st9720 CLK
-#define FIL_RUNOUT_PIN     -1 // Uses Beeper/LED Pin Pulled to GND
+#define LCD_SDSS           31   // Smart Controller SD card reader (rather than the Melzi)
+#define LCD_PINS_RS        28   // ST9720 CS
+#define LCD_PINS_ENABLE    17   // ST9720 DAT
+#define LCD_PINS_D4        30   // ST9720 CLK
+
+#if DISABLED(SPEAKER) && ENABLED(BLTOUCH)
+  #define SERVO0_PIN 27
+#endif
 
 // Alter timing for graphical display
 #ifndef ST7920_DELAY_1
-  #define ST7920_DELAY_1 DELAY_2_NOP
+  #define ST7920_DELAY_1 DELAY_NS(125)
 #endif
 #ifndef ST7920_DELAY_2
-  #define ST7920_DELAY_2 DELAY_2_NOP
+  #define ST7920_DELAY_2 DELAY_NS(125)
 #endif
 #ifndef ST7920_DELAY_3
-  #define ST7920_DELAY_3 DELAY_2_NOP
+  #define ST7920_DELAY_3 DELAY_NS(125)
 #endif
 
 #if ENABLED(MINIPANEL)
